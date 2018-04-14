@@ -1,7 +1,39 @@
 
-function getKeys(chart) {
+function getKeys(chart, mode) {
+  if (mode === 'dtx') {
+    return getKeysDtx(chart)
+  } else {
+    return getKeysBms(chart)
+  }
+}
+
+function getKeysDtx(chart) {
   var objects = chart.objects.all()
   var stat = { }
+  for (var i = 0; i < objects.length; i++) {
+    var object = objects[i]
+    var channel = object.channel
+    if (channel[0] !== '1') {
+      continue
+    }
+
+    stat[channel] = (stat[channel] || 0) + 1
+  }
+
+  if (Object.keys(stat).length === 0) return 'empty'
+
+  if (stat['16'] || stat['18'] || stat['17'] || stat['1A']) {
+    // Use 12 keys if there are cymbals, open hihat or floor tom
+    return '12K'
+  }
+  else {
+    return '8K'
+  }
+}
+
+function getKeysBms(chart) {
+  var objects = chart.objects.all()
+  var stat = {}
   for (var i = 0; i < objects.length; i++) {
     var object = objects[i]
     var channel = +object.channel

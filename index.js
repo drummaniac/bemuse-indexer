@@ -35,6 +35,22 @@ exports.extensions['.bms'] = function (source) {
   })
 }
 
+exports.extensions['.dtx'] = function (source) {
+  return readBMS(source).then(function(str) {
+    var chart   = bms.Compiler.compile(str, { format: 'dtx' }).chart
+    var info    = bms.SongInfo.fromBMSChart(chart)
+    var notes   = bms.Notes.fromBMSChart(chart)
+    var timing  = bms.Timing.fromBMSChart(chart)
+    return {
+      info:       info,
+      notes:      notes,
+      timing:     timing,
+      scratch:    false,
+      keys:       getKeys(chart, 'dtx'),
+    }
+  })
+}
+
 exports.extensions['.bmson'] = function (source) {
   return (
     Promise.try(function () {

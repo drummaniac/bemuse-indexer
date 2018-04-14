@@ -138,6 +138,134 @@ describe('getFileInfo (bms)', function() {
 
 })
 
+describe('getFileInfo (dtx)', function() {
+
+  function info(source) {
+    return indexer.getFileInfo(new Buffer(source), { name: 'meow.dtx' })
+  }
+
+  describe('.md5', function() {
+    it('should return hash', function() {
+      return expect(info('').get('md5'))
+        .to.eventually.equal('d41d8cd98f00b204e9800998ecf8427e')
+    })
+  })
+
+  describe('.info', function() {
+    it('should return song info', function() {
+      var source = '#TITLE: meow'
+      return expect(info(source).get('info').get('title'))
+        .to.eventually.equal('meow')
+    })
+  })
+
+  describe('.noteCount', function() {
+    it('should not count BGM', function() {
+      var source = '#00101: 01'
+      return expect(info(source).get('noteCount')).to.eventually.equal(0)
+    })
+    it('should count playable notes', function() {
+      var source = '#00111: 01'
+      return expect(info(source).get('noteCount')).to.eventually.equal(1)
+    })
+  })
+
+  describe('.scratch', function() {
+    it('is false when no scratch track', function() {
+      var source = '#00101: 01'
+      return expect(info(source).get('scratch')).to.eventually.be.false
+    })
+    it('is false with scratch track too', function() {
+      var source = '#00116: 01'
+      return expect(info(source).get('scratch')).to.eventually.be.false
+    })
+  })
+
+  describe('.keys', function() {
+    it('should be empty when no notes', function() {
+      var source = '#00101: 01'
+      return expect(info(source).get('keys')).to.eventually.equal('empty')
+    })
+    it('should be 12K when left cymbal presented', function() {
+      var source = [
+        '#0011A: 01'
+      ].join('\n')
+      return expect(info(source).get('keys')).to.eventually.equal('12K')
+    })
+    it('should be 12K when right cymbal presented', function() {
+      var source = [
+        '#00116: 01'
+      ].join('\n')
+      return expect(info(source).get('keys')).to.eventually.equal('12K')
+    })
+    it('should be 12K when floor tom presented', function() {
+      var source = [
+        '#00117: 01'
+      ].join('\n')
+      return expect(info(source).get('keys')).to.eventually.equal('12K')
+    })
+    it('should be 12K when open hihat presented', function() {
+      var source = [
+        '#00118: 01'
+      ].join('\n')
+      return expect(info(source).get('keys')).to.eventually.equal('12K')
+    })
+    it('should be 8K when no cymbals, open hihat or floor tom detected', function() {
+      var source = [
+        '#00111: 01',
+        '#00114: 01',
+      ].join('\n')
+      return expect(info(source).get('keys')).to.eventually.equal('8K')
+    })
+  })
+
+  describe('.duration', function() {
+
+    it('should be correct', function() {
+      var source = [
+        '#BPM: 120',
+        '#00111: 0101',
+      ].join('\n')
+      return expect(info(source).get('duration')).to.eventually.equal(3)
+    })
+
+  })
+
+  describe('.bpm', function() {
+
+    var source = [
+      '#BPM: 120',
+      '#BPM01: 240',
+      '#00111: 01',
+      '#00108: 01',
+      '#00203: 3C78',
+      '#00211: 01',
+      '#00311: 01',
+    ].join('\n')
+
+    var bpm
+
+    beforeEach(function() {
+      return info(source).get('bpm').tap(function(x) { bpm = x })
+    })
+
+    it('init should be the BPM at first beat', function() {
+      expect(bpm.init).to.equal(120)
+    })
+    it('median should be the median BPM', function() {
+      expect(bpm.median).to.equal(120)
+    })
+    it('min should be the minimum BPM', function() {
+      expect(bpm.min).to.equal(60)
+    })
+    it('max should be the maximum BPM', function() {
+      expect(bpm.max).to.equal(240)
+    })
+
+  })
+
+})
+
 
 describe('getFileInfo (bmson)', function() {
 
