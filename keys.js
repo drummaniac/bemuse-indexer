@@ -1,6 +1,7 @@
 
-function getKeys(chart, mode) {
-  if (mode === 'dtx') {
+function getKeys(chart, options) {
+  options = options || { }
+  if (options.format === 'dtx') {
     return getKeysDtx(chart)
   } else {
     return getKeysBms(chart)
@@ -23,11 +24,11 @@ function getKeysDtx(chart) {
   if (Object.keys(stat).length === 0) return 'empty'
 
   if (stat['16'] || stat['18'] || stat['17'] || stat['1A']) {
-    // Use 12 keys if there are cymbals, open hihat or floor tom
-    return '12K'
+    // Use 12 drum pads if there are cymbals, open hihat or floor tom
+    return '12D'
   }
   else {
-    return '8K'
+    return '8D'
   }
 }
 

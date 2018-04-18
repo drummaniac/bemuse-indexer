@@ -186,36 +186,36 @@ describe('getFileInfo (dtx)', function() {
       var source = '#00101: 01'
       return expect(info(source).get('keys')).to.eventually.equal('empty')
     })
-    it('should be 12K when left cymbal presented', function() {
+    it('should be 12D when left cymbal presented', function() {
       var source = [
         '#0011A: 01'
       ].join('\n')
-      return expect(info(source).get('keys')).to.eventually.equal('12K')
+      return expect(info(source).get('keys')).to.eventually.equal('12D')
     })
-    it('should be 12K when right cymbal presented', function() {
+    it('should be 12D when right cymbal presented', function() {
       var source = [
         '#00116: 01'
       ].join('\n')
-      return expect(info(source).get('keys')).to.eventually.equal('12K')
+      return expect(info(source).get('keys')).to.eventually.equal('12D')
     })
-    it('should be 12K when floor tom presented', function() {
+    it('should be 12D when floor tom presented', function() {
       var source = [
         '#00117: 01'
       ].join('\n')
-      return expect(info(source).get('keys')).to.eventually.equal('12K')
+      return expect(info(source).get('keys')).to.eventually.equal('12D')
     })
-    it('should be 12K when open hihat presented', function() {
+    it('should be 12D when open hihat presented', function() {
       var source = [
         '#00118: 01'
       ].join('\n')
-      return expect(info(source).get('keys')).to.eventually.equal('12K')
+      return expect(info(source).get('keys')).to.eventually.equal('12D')
     })
-    it('should be 8K when no cymbals, open hihat or floor tom detected', function() {
+    it('should be 8D when no cymbals, open hihat or floor tom presented', function() {
       var source = [
         '#00111: 01',
         '#00114: 01',
       ].join('\n')
-      return expect(info(source).get('keys')).to.eventually.equal('8K')
+      return expect(info(source).get('keys')).to.eventually.equal('8D')
     })
   })
 

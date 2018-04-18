@@ -46,7 +46,7 @@ exports.extensions['.dtx'] = function (source) {
       notes:      notes,
       timing:     timing,
       scratch:    false,
-      keys:       getKeys(chart, 'dtx'),
+      keys:       getKeys(chart, { format: 'dtx' } ),
     }
   })
 }
