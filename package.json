@@ -18,7 +18,7 @@
   "homepage": "https://github.com/bemusic/indexer",
   "dependencies": {
     "bluebird": "^2.9.25",
-    "bms": "drummaniac/bms-js#dtx-support",
+    "bms": "^2.1.0-beta.1",
     "bmson": "^3.1.0",
     "invariant": "^2.1.0",
     "lodash": "^3.8.0",
